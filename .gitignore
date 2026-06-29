@@ -36,3 +36,5 @@ Cargo.lock
 .gemini/
 .tempmediaStorage/
 artifacts/
+
+.vercel

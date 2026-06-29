@@ -270,5 +270,26 @@
       }
     ]
   },
-  "events": []
+  "events": [
+    {
+      "event": {
+        "ext": "v0",
+        "contract_id": "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMDR4",
+        "type_": "contract",
+        "body": {
+          "v0": {
+            "topics": [
+              {
+                "symbol": "DEBUG"
+              }
+            ],
+            "data": {
+              "string": "entering create_project"
+            }
+          }
+        }
+      },
+      "failed_call": true
+    }
+  ]
 }

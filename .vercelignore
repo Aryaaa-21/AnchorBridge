@@ -1,0 +1,9 @@
+node_modules
+target
+contracts/escrow/target
+.git
+.github
+.gemini
+.tempmediaStorage
+artifacts
+dist

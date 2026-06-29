@@ -11,6 +11,7 @@ pub fn initialize(env: &Env, admin: Address, token: Address) -> Result<(), Escro
     write_admin(env, &admin);
     write_token(env, &token);
     write_version(env, 3);
+    crate::storage::write_project_count(env, 0);
 
     events::contract_initialized(env, &admin, &token);
     

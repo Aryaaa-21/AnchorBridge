@@ -305,3 +305,72 @@ fn test_invalid_escrow_amount() {
         &1,
     );
 }
+
+#[test]
+fn test_missing_initialization() {
+    let env = Env::default();
+    let contract_id = env.register_contract(None, EscrowContract);
+    let client_contract = EscrowContractClient::new(&env, &contract_id);
+
+    let client = Address::generate(&env);
+    let freelancer = Address::generate(&env);
+    let title = String::from_str(&env, "Title");
+    let desc = String::from_str(&env, "Desc");
+
+    // This should fail because initialize was not called
+    let result = client_contract.try_create_project(
+        &client,
+        &freelancer,
+        &title,
+        &desc,
+        &1000,
+        &1,
+    );
+
+    assert_eq!(result.is_err(), true);
+}
+
+#[test]
+#[should_panic]
+fn test_create_project_auth_failure() {
+    let env = Env::default();
+    let admin = Address::generate(&env);
+    let client = Address::generate(&env);
+    let freelancer = Address::generate(&env);
+
+    let token_admin = Address::generate(&env);
+    let token_address = env.register_stellar_asset_contract(token_admin);
+
+    let contract_id = env.register_contract(None, EscrowContract);
+    let client_contract = EscrowContractClient::new(&env, &contract_id);
+    client_contract.initialize(&admin, &token_address);
+
+    let title = String::from_str(&env, "Title");
+    let desc = String::from_str(&env, "Desc");
+
+    // This should panic because mock_all_auths was not called, so require_auth fails
+    client_contract.create_project(
+        &client,
+        &freelancer,
+        &title,
+        &desc,
+        &1000,
+        &1,
+    );
+}
+
+#[test]
+fn test_duplicate_project_creation() {
+    let env = Env::default();
+    let (client, freelancer, _, client_contract) = setup_test_env(&env);
+
+    let title = String::from_str(&env, "Project 1");
+    let desc = String::from_str(&env, "First Project");
+    let id1 = client_contract.create_project(&client, &freelancer, &title, &desc, &1000, &1);
+    assert_eq!(id1, 1);
+
+    let title2 = String::from_str(&env, "Project 2");
+    let desc2 = String::from_str(&env, "Second Project");
+    let id2 = client_contract.create_project(&client, &freelancer, &title2, &desc2, &2000, &2);
+    assert_eq!(id2, 2);
+}

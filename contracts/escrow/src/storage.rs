@@ -35,7 +35,12 @@ pub fn write_token(env: &Env, address: &Address) {
 }
 
 pub fn read_project_count(env: &Env) -> u64 {
-    env.storage().instance().get(&DataKey::ProjectCount).unwrap_or(0)
+    if !env.storage().instance().has(&DataKey::ProjectCount) {
+        env.storage().instance().set(&DataKey::ProjectCount, &0u64);
+        0
+    } else {
+        env.storage().instance().get(&DataKey::ProjectCount).unwrap_or(0)
+    }
 }
 
 pub fn write_project_count(env: &Env, count: u64) {

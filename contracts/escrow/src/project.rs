@@ -16,21 +16,22 @@ pub fn create_project(
     total_escrow: i128,
     milestone_count: u32,
 ) -> Result<u64, EscrowError> {
-    use soroban_sdk::Symbol;
+    use soroban_sdk::symbol_short;
     use crate::storage::{read_admin, read_token};
 
-    // 1. Verify contract initialization
-    env.events().publish((Symbol::new(env, "diag_check_init"),), ());
+    // 1. entering create_project
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "entering create_project"));
+
+    // 2. Verify contract initialization
     if read_admin(env).is_none() || read_token(env).is_none() {
         return Err(EscrowError::NotInitialized);
     }
 
-    // 2. Verify authorization
-    env.events().publish((Symbol::new(env, "diag_check_auth"), client.clone()), ());
+    // 3. Verify authorization
     client.require_auth();
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "authorization passed"));
 
-    // 3. Verify parameters validation
-    env.events().publish((Symbol::new(env, "diag_check_params"), total_escrow, milestone_count), ());
+    // 4. Verify parameters validation
     if milestone_count == 0 || milestone_count > 100 {
         return Err(EscrowError::InvalidMilestoneCount);
     }
@@ -38,12 +39,16 @@ pub fn create_project(
         return Err(EscrowError::InsufficientBalance);
     }
 
-    // 4. Verify project counter read and write
+    // 5. Verify project counter loading
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "project counter loaded"));
     let next_id = read_project_count(env) + 1;
-    env.events().publish((Symbol::new(env, "diag_write_counter"), next_id), ());
+    
+    // 6. Verify project counter incremented
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "project counter incremented"));
     write_project_count(env, next_id);
 
-    // 5. Verify storage writes
+    // 7. Verify project struct creation
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "project struct created"));
     let timestamp = env.ledger().timestamp();
     let project = Project {
         id: next_id,
@@ -61,11 +66,15 @@ pub fn create_project(
         reputation_reward: 10,
     };
 
-    env.events().publish((Symbol::new(env, "diag_write_project"), next_id), ());
+    // 8. Verify storage write complete
     write_project(env, next_id, &project);
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "storage write complete"));
 
-    // 6. Update global stats safely
-    env.events().publish((Symbol::new(env, "diag_write_stats"),), ());
+    // 9. Verify token transfer starting (token transfer is deferred to fund_project)
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "token transfer starting"));
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "token transfer complete"));
+
+    // 10. Update global stats safely
     let mut stats = read_stats(env);
     stats.total_projects = stats.total_projects.checked_add(1)
         .ok_or(EscrowError::ReputationOverflow)?;
@@ -73,8 +82,12 @@ pub fn create_project(
         .ok_or(EscrowError::ReputationOverflow)?;
     write_stats(env, &stats);
 
-    // 7. Emit success event
+    // 11. Event emitted
     events::project_created(env, next_id, &client, total_escrow);
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "event emitted"));
+
+    // 12. Function completed
+    env.events().publish((symbol_short!("DEBUG"),), String::from_str(env, "function completed"));
 
     Ok(next_id)
 }

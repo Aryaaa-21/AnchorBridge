@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-bg-app: var(--background);
+  --color-surface-app: var(--surface);
+  --color-border-app: var(--border);
+  --color-text-main: var(--text);
+  --color-text-muted: var(--text-muted);
+  
+  --color-primary-brand: #5d240a;
+  --color-accent-brand: #ac5c2c;
+  --color-highlight-brand: #bca464;
+  --color-muted-brand: #9894ac;
+  --color-dark-bg: #171514;
+  --color-dark-surface: #24211f;
+  --color-dark-border: #39332d;
+  --color-text-light: #2b1d16;
+  --color-text-dark: #f5efe7;
+  
+  --color-success-brand: #4CAF50;
+  --color-warning-brand: #E8A317;
+  --color-error-brand: #D9534F;
+
+  --font-sans: 'Geist', 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', 'Courier New', monospace;
+  
+  --radius-xl: 1.5rem;
+  --radius-lg: 1rem;
+  --radius-md: 0.5rem;
+}
+
+@layer base {
+  :root {
+    --background: #d4c5b3;
+    --surface: rgba(255, 255, 255, 0.4);
+    --border: rgba(93, 36, 10, 0.15);
+    --text: #2b1d16;
+    --text-muted: #6e645e;
+  }
+
+  .dark {
+    --background: #171514;
+    --surface: #24211f;
+    --border: #39332d;
+    --text: #f5efe7;
+    --text-muted: #9894ac;
+  }
+  
+  body {
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--font-sans);
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Focus ring for accessibility */
+  input:focus, textarea:focus, select:focus, button:focus-visible {
+    outline: none;
+    border-color: #ac5c2c !important;
+    box-shadow: 0 0 0 2px rgba(172, 92, 44, 0.25), 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Accessible hide */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(93, 36, 10, 0.12);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+}
+
+.dark .glass-panel {
+  background: rgba(36, 33, 31, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(245, 239, 231, 0.07);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(93, 36, 10, 0.04);
+}
+
+.dark .glass-card {
+  background: rgba(36, 33, 31, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(245, 239, 231, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Custom Web3 Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(93, 36, 10, 0.18);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(245, 239, 231, 0.08);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ac5c2c;
+}
+
+/* Animation classes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Premium Earthy Gradients */
+.earthy-gradient-hero {
+  background: radial-gradient(circle at 50% 50%, rgba(172, 92, 44, 0.06) 0%, transparent 70%);
+}
+
+.dark .earthy-gradient-hero {
+  background: radial-gradient(circle at 50% 50%, rgba(93, 36, 10, 0.15) 0%, transparent 70%);
+}

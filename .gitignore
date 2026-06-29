@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+jspm_packages/
+
+# Production builds
+dist/
+tmp/
+out/
+build/
+
+# IDE / System files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Rust build artifacts
+target/
+contracts/escrow/target/
+**/*.rs.bk
+Cargo.lock
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Gemini Agent Temp folders
+.gemini/
+.tempmediaStorage/
+artifacts/

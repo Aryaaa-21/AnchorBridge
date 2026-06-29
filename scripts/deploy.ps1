@@ -29,15 +29,37 @@ $optimizedPath = "contracts/escrow/target/wasm32v1-none/release/anchorbridge_esc
 stellar contract optimize --wasm $wasmPath
 
 # 3. Deploy escrow contract to Stellar Testnet
-Write-Host "[3/5] Deploying contract to Testnet..." -ForegroundColor Yellow
+Write-Host "[3/5] Installing WASM bytecode on Testnet..." -ForegroundColor Yellow
 # Clean local cache to prevent skipping install if previous run was dirty
 $specDir = "C:\Users\Arya Bhagat\AppData\Local\stellar\stellar-cli\data\spec"
 if (Test-Path $specDir) {
     Get-ChildItem $specDir | Remove-Item -Force
 }
 
-# Run deployment and capture output
-$deployOutput = stellar contract deploy --wasm $optimizedPath --source $source --network $network 2>&1
+$installOutput = stellar contract install --wasm $optimizedPath --source $source --network $network
+$installOutputStr = $installOutput | Out-String
+Write-Host $installOutputStr
+
+# Extract Wasm hash
+$wasmHash = ""
+foreach ($line in ($installOutputStr -split "`n")) {
+    $trimmed = $line.Trim()
+    if ($trimmed -match "^[a-fA-F0-9]{64}$") {
+        $wasmHash = $trimmed
+    }
+}
+if (-not $wasmHash) {
+    if ($installOutputStr -match "([a-fA-F0-9]{64})") {
+        $wasmHash = $Matches[1]
+    }
+}
+if (-not $wasmHash) {
+    Write-Error "WASM installation failed or hash could not be parsed."
+}
+Write-Host "WASM Hash: $wasmHash" -ForegroundColor Green
+
+Write-Host "Deploying contract instance to Testnet..." -ForegroundColor Yellow
+$deployOutput = stellar contract deploy --wasm-hash $wasmHash --source $source --network $network
 $deployOutputStr = $deployOutput | Out-String
 Write-Host $deployOutputStr
 
@@ -51,8 +73,9 @@ foreach ($line in ($deployOutputStr -split "`n")) {
 }
 
 if (-not $contractId) {
-    # Try finding the deployed ID from the transaction logs or fallback to regex match
-    if ($deployOutputStr -match "Deployed!\s+(C[A-Z0-9]{55})") {
+    if ($deployOutputStr -match "([oO]utput|[dD]eployed!)\s+(C[A-Z0-9]{55})") {
+        $contractId = $Matches[2]
+    } elseif ($deployOutputStr -match "(C[A-Z0-9]{55})") {
         $contractId = $Matches[1]
     }
 }
@@ -66,7 +89,7 @@ Write-Host "Deployed Contract ID: $contractId" -ForegroundColor Green
 # 4. Initialize contract
 Write-Host "[4/5] Initializing contract..." -ForegroundColor Yellow
 $adminAddress = "GCQK2KUE6UAYMTVZ334WMTLDY3XP3JAQ24NE2I6W5WXXQFVZF4EAN5YP"
-$initOutput = stellar contract invoke --id $contractId --source $source --network $network -- initialize --admin $adminAddress --token $tokenAddress 2>&1
+$initOutput = stellar contract invoke --id $contractId --source $source --network $network -- initialize --admin $adminAddress --token $tokenAddress
 $initOutputStr = $initOutput | Out-String
 Write-Host $initOutputStr
 

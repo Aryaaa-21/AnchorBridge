@@ -1,366 +1,330 @@
-# AnchorBridge — Decentralized Milestone Escrow on Stellar
+# AnchorBridge
 
-<div align="center">
+### Decentralized Milestone Escrow Platform on Stellar
 
-![AnchorBridge Banner](docs/assets/banner.png)
+Trustless freelance collaboration powered by Stellar and Soroban smart contracts.
 
-**Trustless freelance collaboration secured by Soroban smart contracts.**  
-Funds release milestone-by-milestone. No intermediary. No fees. No trust required.
-
-[![CI Frontend](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/frontend.yml/badge.svg)](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/frontend.yml)
-[![CI Contract](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/contract.yml/badge.svg)](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/contract.yml)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-black?logo=vercel)](https://anchorbridge-taupe.vercel.app)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-</div>
+Clients lock funds into on-chain escrow. Freelancers complete milestones. Payments are released automatically through smart contract execution after approval.
 
 ---
 
-## 🔗 Live Demo
+## Live Demo
 
-> **[https://anchorbridge-taupe.vercel.app](https://anchorbridge-taupe.vercel.app)**
+🌐 https://anchorbridge-taupe.vercel.app
 
-Connect your Freighter wallet on Stellar Testnet to interact with the live deployment.
+🎥 Demo Video: ADD_YOUR_VIDEO_LINK_HERE
 
 ---
 
-## 📋 Deployed Contract
+## Problem
+
+Freelancers and clients often rely on centralized platforms that charge high fees and require trust in intermediaries.
+
+Common issues:
+
+- Payment disputes
+- Delayed releases
+- Platform fees
+- Lack of transparency
+- No verifiable escrow process
+
+---
+
+## Solution
+
+AnchorBridge provides a decentralized milestone escrow system built entirely on Stellar.
+
+The platform enables:
+
+- On-chain escrow locking
+- Milestone-based releases
+- Automated fund distribution
+- Transparent transaction history
+- Verifiable smart contract execution
+
+No middleman.
+
+No platform custody.
+
+No hidden fees.
+
+---
+
+## Key Features
+
+### Smart Contract Escrow
+
+Funds are locked inside a Soroban smart contract until milestone approval.
+
+### Milestone Payments
+
+Release funds step-by-step instead of paying the full amount upfront.
+
+### Freighter Wallet Integration
+
+Connect, sign, and confirm transactions directly from the browser.
+
+### Real-Time Updates
+
+Dashboard automatically updates through Soroban event monitoring.
+
+### Dispute Resolution
+
+Projects can be disputed, refunded, or cancelled according to contract rules.
+
+### Mobile Responsive
+
+Optimized for desktop, tablet, and mobile devices.
+
+---
+
+## Smart Contract
 
 | Field | Value |
-|-------|-------|
-| **Contract ID** | `CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27` |
-| **Network** | Stellar Testnet |
-| **Token (SAC)** | `CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC` |
-| **Admin** | `GCQK2KUE6UAYMTVZ334WMTLDY3XP3JAQ24NE2I6W5WXXQFVZF4EAN5YP` |
-| **Explorer** | [View on Stellar Expert](https://stellar.expert/explorer/testnet/contract/CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27) |
-| **Stellar Lab** | [Inspect in Lab](https://lab.stellar.org/r/testnet/contract/CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27) |
+|---------|---------|
+| Network | Stellar Testnet |
+| Contract ID | `CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27` |
+| Token Contract | `CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC` |
 
-### Sample Contract Interaction
+### Explorer
 
-| Field | Value |
-|-------|-------|
-| **Transaction Hash** | `b520a4cfde3e7cf992e95e73327ad05457df53a0a576454eed62c2e0f50e5ed2` |
-| **Operation** | `initialize` — Contract Initialization |
-| **Explorer Link** | [View TX](https://stellar.expert/explorer/testnet/tx/b520a4cfde3e7cf992e95e73327ad05457df53a0a576454eed62c2e0f50e5ed2) |
-| **Timestamp** | 2026-06-29 09:37:39 UTC |
-| **Status** | ✅ SUCCESS |
+Contract:
+https://stellar.expert/explorer/testnet/contract/CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27
 
 ---
 
-## 🚀 What is AnchorBridge?
+## Architecture
 
-AnchorBridge is a decentralized milestone-based escrow platform built on **Stellar** and powered by **Soroban smart contracts**. It enables clients and freelancers to collaborate with cryptographic trust:
-
-- **Client** deposits funds into the smart contract escrow
-- **Funds lock** on-chain until milestones are approved
-- **Freelancer** submits work deliverables
-- **Milestone approval** triggers automatic fund release via token transfer
-- **Disputes** lock funds in arbitration for manual resolution
-
-**Zero intermediary fees. Zero trust required. Fully on-chain.**
-
----
-
-## ✨ Key Features
-
-| Feature | Implementation |
-|---------|----------------|
-| 🔐 Soroban Smart Contract Escrow | Multi-module Rust contract with authorization, state machine, and token integration |
-| 🎯 Milestone-Based Fund Release | Funds released tranche-by-tranche on client approval |
-| ⚡ Real-Time Event Streaming | Soroban RPC `getEvents` polling with exponential backoff |
-| 🦺 Dispute Resolution | Arbitration flow locks funds until admin resolves |
-| 👛 Freighter Wallet Native | Full lifecycle: connect → sign → submit → confirm |
-| 📊 Live Dashboard | Real-time project status, balance sync, and notification feed |
-| 📱 Mobile Responsive | Fully responsive UI across all screen sizes |
-
----
-
-## 🏗️ Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    FRONTEND (React + TypeScript)             │
-│  ┌──────────────┐  ┌───────────────┐  ┌─────────────────┐   │
-│  │  Freighter   │  │  StellarSvc   │  │  EventListener  │   │
-│  │  Wallet API  │  │  (Horizon +   │  │  (Soroban RPC   │   │
-│  │              │  │   Soroban RPC)│  │   getEvents)    │   │
-│  └──────┬───────┘  └───────┬───────┘  └────────┬────────┘   │
-│         │                  │                   │             │
-│         └──────────────────┴───────────────────┘             │
-│                            │                                 │
-│                    ┌───────┴────────┐                        │
-│                    │  Zustand Store │                        │
-│                    │  (Global State)│                        │
-│                    └───────┬────────┘                        │
-│                            │                                 │
-│         ┌──────────────────┼──────────────────┐             │
-│   ┌─────┴──────┐   ┌───────┴──────┐  ┌────────┴──────┐      │
-│   │ Dashboard  │   │   Projects   │  │    Wallet     │      │
-│   │   Page     │   │    Pages     │  │     Page      │      │
-│   └────────────┘   └──────────────┘  └───────────────┘      │
-└─────────────────────────────────────────────────────────────┘
-                             │
-                    ┌────────┴────────┐
-                    │   Stellar RPC   │
-                    │   (Testnet)     │
-                    └────────┬────────┘
-                             │
-┌────────────────────────────┴────────────────────────────────┐
-│              SOROBAN SMART CONTRACT (Rust)                    │
-│                                                              │
-│  ┌─────────┐  ┌──────────┐  ┌─────────┐  ┌──────────────┐  │
-│  │ project │  │milestone │  │ escrow  │  │   payment    │  │
-│  │  .rs    │  │   .rs    │  │   .rs   │  │     .rs      │  │
-│  └─────────┘  └──────────┘  └─────────┘  └──────────────┘  │
-│  ┌─────────┐  ┌──────────┐  ┌─────────┐  ┌──────────────┐  │
-│  │ storage │  │   auth   │  │ events  │  │  reputation  │  │
-│  │   .rs   │  │   .rs    │  │   .rs   │  │     .rs      │  │
-│  └─────────┘  └──────────┘  └─────────┘  └──────────────┘  │
-│                                                              │
-│              Token SAC Contract (inter-contract call)        │
-│         CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC  │
-└─────────────────────────────────────────────────────────────┘
+```text
+User
+  │
+  ▼
+Freighter Wallet
+  │
+  ▼
+React Frontend
+  │
+  ▼
+Soroban RPC
+  │
+  ▼
+Escrow Smart Contract
+  │
+  ▼
+Stellar Testnet
 ```
 
 ---
 
-## ⚡ Event Streaming System
+## Technology Stack
 
-The `eventListener.ts` service implements a production-grade polling engine:
+### Frontend
 
-```
-[Soroban RPC getEvents] ──poll every 5s──▶ [Event Filter: contractId]
-        │
-        ▼
-[Parse ScVal topics + values]
-        │
-        ├── project_created   ──▶ Notification + Balance Sync
-        ├── escrow_funded     ──▶ Notification + Balance Sync
-        ├── milestone_submitted ▶ Milestone State Update
-        ├── milestone_approved ──▶ Milestone State + Completion Check
-        ├── milestone_rejected ──▶ Milestone State Reset
-        ├── funds_released    ──▶ Escrow Balance Update
-        ├── refund_issued     ──▶ Project Status = Completed
-        └── project_cancelled ──▶ Project Status = Cancelled
+- React
+- TypeScript
+- Vite
+- TailwindCSS
+- Zustand
 
-[Error] ──exponential backoff──▶ Retry (5s → 7.5s → 11.25s → max 60s)
-```
+### Blockchain
+
+- Stellar SDK
+- Soroban Smart Contracts
+- Horizon API
+- Soroban RPC
+- Freighter Wallet
+
+### Smart Contract
+
+- Rust
+- Soroban SDK
 
 ---
 
-## 🧪 Testing Overview
+# Screenshots
 
-### Smart Contract Tests (16 passing)
+## Landing Page
+
+<img width="1909" height="932" alt="image" src="https://github.com/user-attachments/assets/f2acfb56-7e84-4042-9d36-90bba2742820" />
+
+---
+
+## Dashboard
+
+<img width="1912" height="935" alt="image" src="https://github.com/user-attachments/assets/ec681627-3ba0-4770-89f7-955d65780e77" />
+
+---
+
+## Wallet Integration
+
+<img width="1911" height="937" alt="image" src="https://github.com/user-attachments/assets/43aaf822-0620-4443-b228-1eb1efd83d51" />
+
+---
+
+## Create Project
+
+<img width="1914" height="933" alt="image" src="https://github.com/user-attachments/assets/208692fd-11f3-481f-b5ec-bacf477e320a" />
+
+---
+
+## Smart Contract
+
+<img width="1911" height="934" alt="image" src="https://github.com/user-attachments/assets/7f6520da-99db-4c82-bcba-df1774190e8c" />
+
+---
+
+## Event Feed
+
+<img width="1903" height="935" alt="image" src="https://github.com/user-attachments/assets/2cf2726e-9a3e-4b92-aea6-57f122206652" />
+
+---
+
+## Mobile Responsive UI
+
+<img width="376" height="812" alt="image" src="https://github.com/user-attachments/assets/2bc5f137-92f9-4da2-9050-dd2fb56a9764" />
+
+---
+
+
+# Demo Flow
+
+1. Connect Freighter Wallet
+2. Create Project
+3. Lock Escrow Funds
+4. Submit Milestone
+5. Approve Milestone
+6. Release Payment
+7. Verify Transaction on Stellar Expert
+
+---
+
+# Testing
+
+### Smart Contract Tests
 
 ```bash
-cd contracts/escrow
-cargo test -- --nocapture
+cargo test
 ```
 
-| Test | Coverage |
-|------|----------|
-| `test_initialize` | Contract initialization |
-| `test_create_project_and_fund` | Full project creation + funding flow |
-| `test_milestone_workflow` | Submit → Approve → Fund Release |
-| `test_refund_client` | Client refund on active project |
-| `test_dispute_milestone` | Dispute locking |
-| `test_cancel_project` | Pre-funding cancellation |
-| `test_create_milestone_unauthorized` | Authorization guard |
-| `test_submit_milestone_unauthorized` | Authorization guard |
-| `test_approve_milestone_unauthorized` | Authorization guard |
-| `test_milestone_invalid_index` | Bounds check |
-| `test_invalid_milestone_count` | Zero milestone rejection |
-| `test_invalid_escrow_amount` | Zero escrow rejection |
-| `test_missing_initialization` | NotInitialized error path |
-| `test_create_project_auth_failure` | Auth failure without mock |
-| `test_duplicate_project_creation` | Counter increment validation |
-| `test_multiple_projects_integration` | Multi-project state isolation |
+Result:
 
-### Frontend Tests (12 passing)
+```text
+16 Passed
+0 Failed
+```
+
+### Frontend Tests
 
 ```bash
 npm run test
 ```
 
-| Test Suite | Tests |
-|-----------|-------|
-| `store.test.ts` | 6 — State management, login, logout, notifications, tx status |
-| `components.test.tsx` | 6 — Landing page render, navigation, wallet states |
+Result:
 
----
-
-## 🔄 CI/CD Overview
-
-Two GitHub Actions workflows run on every push and pull request to `main`:
-
-### `.github/workflows/frontend.yml`
-```
-Install Node 22 → npm ci → oxlint → vitest run → vite build
-```
-
-### `.github/workflows/contract.yml`
-```
-Setup Rust stable → cargo check → cargo test
-```
-
-[![CI Frontend](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/frontend.yml/badge.svg)](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/frontend.yml)
-[![CI Contract](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/contract.yml/badge.svg)](https://github.com/Aryaaa-21/AnchorBridge/actions/workflows/contract.yml)
-
----
-
-## 🗂️ Repository Structure
-
-```
-anchorbridge/
-├── contracts/escrow/           # Rust Soroban Smart Contract
-│   ├── src/
-│   │   ├── lib.rs              # Contract entry point & public methods
-│   │   ├── project.rs          # Project creation, funding, cancellation
-│   │   ├── milestone.rs        # Milestone lifecycle (create/submit/approve/reject)
-│   │   ├── escrow.rs           # Dispute locking & refund logic
-│   │   ├── payment.rs          # Inter-contract token transfer (SAC)
-│   │   ├── auth.rs             # Authorization helpers
-│   │   ├── storage.rs          # Instance & persistent storage operations
-│   │   ├── events.rs           # On-chain event emissions
-│   │   ├── types.rs            # Structs, enums, constants
-│   │   ├── errors.rs           # EscrowError enum (9 error types)
-│   │   ├── reputation.rs       # Reputation scoring system
-│   │   ├── admin.rs            # Admin & upgrade functions
-│   │   ├── migration.rs        # Contract migration support
-│   │   ├── test.rs             # 15 unit tests
-│   │   └── integration_test.rs # 1 integration test
-│   └── Cargo.toml
-├── src/                        # React + TypeScript Frontend
-│   ├── components/             # Layout, Navbar, Sidebar
-│   ├── config/contracts.ts     # Contract ID & network config
-│   ├── pages/                  # Dashboard, Projects, Wallet, CreateProject, etc.
-│   ├── services/
-│   │   ├── stellar.ts          # Freighter + Horizon + Soroban RPC service
-│   │   └── eventListener.ts    # Real-time Soroban event polling
-│   ├── store/useStore.ts       # Zustand global state
-│   └── tests/                  # Vitest + RTL test suites
-├── docs/                       # Submission documentation
-│   ├── SCREENSHOTS.md          # Screenshot evidence guide
-│   ├── DEMO_VIDEO.md           # Demo video script
-│   ├── SUBMISSION_CHECKLIST.md # Level 1/2/3 submission checklist
-│   └── README_ASSETS.md        # Asset & documentation index
-├── scripts/deploy.ps1          # Full deployment automation script
-├── .github/workflows/          # CI/CD pipelines
-│   ├── frontend.yml            # Frontend: lint + test + build
-│   └── contract.yml            # Rust: check + test
-├── vercel.json                 # Vercel deployment config
-└── vite.config.ts              # Vite bundler config
+```text
+12 Passed
+0 Failed
 ```
 
 ---
 
-## 🛠️ Local Setup
+# CI/CD
 
-### Prerequisites
-- [Node.js 20+](https://nodejs.org/)
-- [Rust](https://www.rust-lang.org/tools/install) + `wasm32v1-none` target
-- [Stellar CLI](https://developers.stellar.org/docs/tools/developer-tools/stellar-cli)
-- [Freighter Wallet](https://freighter.app/) browser extension
+GitHub Actions automatically run:
 
-### 1. Clone the Repository
+- Frontend Build
+- Frontend Tests
+- Rust Contract Tests
+- Type Checking
+
+Add Screenshot Here:
+
+<img width="1902" height="938" alt="image" src="https://github.com/user-attachments/assets/7a9ba21b-b6f9-4884-9681-845fc25b0246" />
+
+---
+
+# Local Setup
+
+## Clone Repository
+
 ```bash
 git clone https://github.com/Aryaaa-21/AnchorBridge.git
+
 cd AnchorBridge
 ```
 
-### 2. Install Frontend Dependencies
+## Install Dependencies
+
 ```bash
 npm install
 ```
 
-### 3. Run Development Server
+## Run Frontend
+
 ```bash
 npm run dev
-# → http://localhost:5173
 ```
 
-### 4. Run Frontend Tests
+## Run Tests
+
 ```bash
 npm run test
-```
 
-### 5. Run Contract Tests
-```bash
-cd contracts/escrow
-cargo test -- --nocapture
+cargo test
 ```
 
 ---
 
-## 📦 Smart Contract Deployment
+# Repository Structure
 
-The `scripts/deploy.ps1` script automates the full deployment pipeline:
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1
-```
-
-**Pipeline steps:**
-1. Build WASM (`cargo build --release`)
-2. Optimize WASM (`stellar contract optimize`)
-3. Upload WASM bytecode to Testnet
-4. Deploy contract instance
-5. Initialize contract with admin + token address
-6. Save contract ID to `src/config/contracts.ts`
-
-### Manual Deployment
-```bash
-# 1. Build
-cd contracts/escrow
-cargo build --target wasm32v1-none --release
-
-# 2. Deploy
-stellar contract deploy \
-  --wasm target/wasm32v1-none/release/anchorbridge_escrow.wasm \
-  --source developer \
-  --network testnet
-
-# 3. Initialize
-stellar contract invoke \
-  --id CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27 \
-  --source developer \
-  --network testnet \
-  -- initialize \
-  --admin GCQK2KUE6UAYMTVZ334WMTLDY3XP3JAQ24NE2I6W5WXXQFVZF4EAN5YP \
-  --token CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC
+```text
+contracts/
+docs/
+src/
+.github/
+scripts/
 ```
 
 ---
 
-## 🌐 Explorer Links
+# Stellar Level Compliance
 
-| Resource | Link |
-|----------|------|
-| Contract on Stellar Expert | [View Contract](https://stellar.expert/explorer/testnet/contract/CCLPZ52ADXP4WJXP37Y7EQVMROX7HMFLF7AMIVEEMIVOPRBFEYGBBA27) |
-| Initialization TX | [View TX](https://stellar.expert/explorer/testnet/tx/b520a4cfde3e7cf992e95e73327ad05457df53a0a576454eed62c2e0f50e5ed2) |
-| WASM Upload TX | [View TX](https://stellar.expert/explorer/testnet/tx/4bcf25e447927ed11461e4f4941a55baa2d853fa5a1c6af63e0b4cb65ea4c25c) |
-| Admin Account | [View Account](https://stellar.expert/explorer/testnet/account/GCQK2KUE6UAYMTVZ334WMTLDY3XP3JAQ24NE2I6W5WXXQFVZF4EAN5YP) |
+## Level 1
+
+- Wallet Integration
+- Testnet Transactions
+- Balance Display
+- Transaction Feedback
+
+## Level 2
+
+- Soroban Smart Contract
+- Contract Deployment
+- Contract Invocation
+- Explorer Verification
+
+## Level 3
+
+- Advanced Smart Contract
+- Event Streaming
+- CI/CD
+- Frontend Tests
+- Contract Tests
+- Mobile Responsive UI
+- Production Documentation
 
 ---
 
-## 🔒 Error Handling
+# Future Scope
 
-The contract exposes 9 typed error codes via `EscrowError`:
-
-| Code | Error | Description |
-|------|-------|-------------|
-| #1 | `AlreadyInitialized` | Contract already set up |
-| #2 | `NotInitialized` | Contract not initialized |
-| #3 | `Unauthorized` | Caller lacks permission |
-| #4 | `ProjectNotFound` | Project ID does not exist |
-| #5 | `MilestoneNotFound` | Milestone index out of bounds |
-| #6 | `InvalidStatus` | Action invalid for current state |
-| #7 | `InsufficientBalance` | Amount ≤ 0 or insufficient |
-| #8 | `InvalidMilestoneCount` | Count = 0 or > 100 |
-| #9 | `ReputationOverflow` | Stats arithmetic overflow |
+- Multi-signature approvals
+- DAO-based dispute resolution
+- Mainnet deployment
+- Cross-contract reputation system
+- Multi-token escrow support
 
 ---
 
-## 📄 License
+# License
 
-MIT © 2026 AnchorBridge
+MIT License

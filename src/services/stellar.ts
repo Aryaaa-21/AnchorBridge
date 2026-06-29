@@ -1,5 +1,5 @@
 import { isConnected, requestAccess, signTransaction, getNetwork } from '@stellar/freighter-api';
-import { Horizon, TransactionBuilder, Operation, Address, nativeToScVal, scValToNative, rpc, Account } from 'stellar-sdk';
+import { Horizon, TransactionBuilder, Operation, Address, nativeToScVal, scValToNative, rpc, Account, xdr } from 'stellar-sdk';
 import { toast } from 'sonner';
 import { NETWORK_PASSPHRASE, RPC_URL, HORIZON_URL } from '../config/contracts';
 
@@ -189,6 +189,62 @@ class StellarService {
   }
 
   /**
+   * Helper to convert JS arguments to Soroban ScVal array matching the smart contract signatures.
+   */
+  private serializeArgs(functionName: string, args: any[]): xdr.ScVal[] {
+    const paramLayouts: Record<string, string[]> = {
+      create_project: ['address', 'address', 'string', 'string', 'i128', 'u32'],
+      create_milestone: ['address', 'u64', 'u32', 'string', 'i128', 'u64'],
+      fund_project: ['address', 'u64'],
+      submit_milestone: ['address', 'u64', 'u32', 'string'],
+      approve_milestone: ['address', 'u64', 'u32'],
+      reject_milestone: ['address', 'u64', 'u32'],
+      dispute_milestone: ['address', 'u64', 'u32'],
+      resolve_dispute: ['address', 'u64', 'u32', 'bool'],
+      refund_client: ['address', 'u64'],
+      cancel_project: ['address', 'u64']
+    };
+
+    const layout = paramLayouts[functionName];
+    return args.map((arg, idx) => {
+      // If already an ScVal, return as is
+      if (arg && typeof arg === 'object' && arg.value !== undefined && arg.switch !== undefined) {
+        return arg;
+      }
+
+      const expectedType = layout ? layout[idx] : undefined;
+
+      if (expectedType === 'address') {
+        return Address.fromString(arg.toString()).toScVal();
+      }
+      if (expectedType === 'u32') {
+        return xdr.ScVal.scvU32(Number(arg));
+      }
+      if (expectedType === 'u64') {
+        return xdr.ScVal.scvU64(xdr.Uint64.fromString(arg.toString()));
+      }
+      if (expectedType === 'i128') {
+        return nativeToScVal(BigInt(arg));
+      }
+      if (expectedType === 'bool') {
+        return nativeToScVal(!!arg);
+      }
+      if (expectedType === 'string') {
+        return nativeToScVal(arg.toString());
+      }
+
+      // Fallback heuristics if type layout doesn't exist
+      if (typeof arg === 'string' && arg.length === 56 && (arg.startsWith('G') || arg.startsWith('C'))) {
+        return Address.fromString(arg).toScVal();
+      }
+      if (typeof arg === 'bigint') {
+        return nativeToScVal(arg);
+      }
+      return nativeToScVal(arg);
+    });
+  }
+
+  /**
    * Invokes a Soroban smart contract function on Testnet.
    * Performs full simulation, fee estimation, signature request, and transaction monitoring.
    */
@@ -205,24 +261,7 @@ class StellarService {
       
       const account = await horizonServer.loadAccount(senderAddress);
       
-      const scValArgs = args.map(arg => {
-        // If already an ScVal, return as is
-        if (arg && typeof arg === 'object' && arg.value !== undefined && arg.switch !== undefined) {
-          return arg;
-        }
-        
-        // Treat 56-character G... and C... strings as Addresses
-        if (typeof arg === 'string' && arg.length === 56 && (arg.startsWith('G') || arg.startsWith('C'))) {
-          return Address.fromString(arg).toScVal();
-        }
-        
-        // Numbers that are BigInts are mapped directly to i128
-        if (typeof arg === 'bigint') {
-          return nativeToScVal(arg);
-        }
-        
-        return nativeToScVal(arg);
-      });
+      const scValArgs = this.serializeArgs(functionName, args);
 
       const operation = Operation.invokeContractFunction({
         contract: contractId,
@@ -304,15 +343,7 @@ class StellarService {
       // Use a dummy funded/unfunded public key for constructing the simulation transaction
       const dummyAccount = new Account('GCQK2KUE6UAYMTVZ334WMTLDY3XP3JAQ24NE2I6W5WXXQFVZF4EAN5YP', '0');
       
-      const scValArgs = args.map(arg => {
-        if (arg && typeof arg === 'object' && arg.value !== undefined && arg.switch !== undefined) {
-          return arg;
-        }
-        if (typeof arg === 'string' && arg.length === 56 && (arg.startsWith('G') || arg.startsWith('C'))) {
-          return Address.fromString(arg).toScVal();
-        }
-        return nativeToScVal(arg);
-      });
+      const scValArgs = this.serializeArgs(functionName, args);
 
       const operation = Operation.invokeContractFunction({
         contract: contractId,

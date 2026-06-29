@@ -177,9 +177,16 @@ export const Layout: React.FC = () => {
                   {txStatus.message}
                 </p>
                 {txStatus.error && (
-                  <p className="text-[11px] text-[#D9534F] bg-[#D9534F]/10 p-3 rounded-lg border border-[#D9534F]/25 font-mono text-left break-words">
-                    Error: {txStatus.error}
-                  </p>
+                  <div className="space-y-2 text-left">
+                    <p className="text-[11px] text-[#D9534F] bg-[#D9534F]/10 p-3 rounded-lg border border-[#D9534F]/25 font-mono break-words">
+                      Error: {txStatus.error}
+                    </p>
+                    {txStatus.error.toLowerCase().includes('locked') && (
+                      <p className="text-[11.5px] text-[#bca464] font-sans bg-[#bca464]/5 p-2.5 rounded-lg border border-[#bca464]/20 leading-normal">
+                        💡 <strong>Troubleshooting tip:</strong> Please open the Freighter browser extension, enter your password to unlock it, and verify that you have a Stellar account active.
+                      </p>
+                    )}
+                  </div>
                 )}
               </div>
 

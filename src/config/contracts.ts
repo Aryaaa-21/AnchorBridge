@@ -7,7 +7,7 @@ export const RPC_URL = import.meta.env.VITE_SOROBAN_RPC_URL || 'https://soroban-
 export const HORIZON_URL = import.meta.env.VITE_HORIZON_URL || 'https://horizon-testnet.stellar.org';
 
 // Deployed contract addresses
-export const ESCROW_CONTRACT_ID = import.meta.env.VITE_ESCROW_CONTRACT_ID || 'CBTNTSYZZI7B3T3YYX2W7KAXB3Y6IYAWNGCSLPTC4ITNX2T2SQRUOO6R';
+export const ESCROW_CONTRACT_ID = import.meta.env.VITE_ESCROW_CONTRACT_ID || 'CB34UQT34HOJMQC6T2YJBGYQD7JDFHLEQRUH2L4RGNJM2LTIBKJYUTIC';
 export const TOKEN_CONTRACT_ID = import.meta.env.VITE_TOKEN_CONTRACT_ID || 'CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC';
 
 // Validate contract IDs are present and formatted correctly

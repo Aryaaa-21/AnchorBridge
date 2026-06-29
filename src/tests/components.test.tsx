@@ -8,14 +8,15 @@ import { CreateProject } from '../pages/CreateProject';
 import { Profile } from '../pages/Profile';
 import { useStore } from '../store/useStore';
 
-// Mock window matchMedia to prevent framer-motion failures
-global.matchMedia = global.matchMedia || function() {
-  return {
-    matches: false,
-    addListener: function() {},
-    removeListener: function() {}
+if (typeof window !== 'undefined') {
+  window.matchMedia = window.matchMedia || function() {
+    return {
+      matches: false,
+      addListener: function() {},
+      removeListener: function() { }
+    };
   };
-};
+}
 
 describe('React Page Component Tests', () => {
   it('renders Landing page content correctly', () => {

@@ -224,7 +224,19 @@ class StellarService {
         return xdr.ScVal.scvU64(xdr.Uint64.fromString(arg.toString()));
       }
       if (expectedType === 'i128') {
-        return nativeToScVal(BigInt(arg));
+        // nativeToScVal(BigInt) emits ScvI64/ScvU64 for small values — NOT ScvI128.
+        // The Soroban host enforces strict XDR type matching against the WASM signature.
+        // We must manually construct ScvI128 with proper hi/lo 64-bit decomposition.
+        let value = BigInt(arg);
+        if (value < 0n) value = value + (1n << 128n); // two's complement for negatives
+        const lo = value & 0xffffffffffffffffn;
+        const hi = (value >> 64n) & 0xffffffffffffffffn;
+        return xdr.ScVal.scvI128(
+          new xdr.Int128Parts({
+            lo: xdr.Uint64.fromString(lo.toString()),
+            hi: xdr.Int64.fromString(hi.toString()),
+          })
+        );
       }
       if (expectedType === 'bool') {
         return nativeToScVal(!!arg);

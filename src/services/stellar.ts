@@ -1,4 +1,4 @@
-import freighterApi from '@stellar/freighter-api';
+import { isConnected, requestAccess, signTransaction, getNetwork } from '@stellar/freighter-api';
 import { Horizon, TransactionBuilder, Operation, Address, nativeToScVal, scValToNative, rpc, Account } from 'stellar-sdk';
 import { toast } from 'sonner';
 import { NETWORK_PASSPHRASE, RPC_URL, HORIZON_URL } from '../config/contracts';
@@ -21,7 +21,7 @@ class StellarService {
    */
   async isFreighterInstalled(): Promise<boolean> {
     try {
-      const result = await freighterApi.isConnected();
+      const result = await isConnected();
       return !!result && result.isConnected;
     } catch {
       return false;
@@ -38,13 +38,13 @@ class StellarService {
     }
 
     try {
-      const result = await freighterApi.getAddress();
+      const result = await requestAccess();
       if (!result || !result.address || result.error) {
-        throw new Error(result?.error || 'Freighter Wallet is locked or no account is active.');
+        throw new Error(result?.error || 'Freighter Wallet access was not authorized or no account is active.');
       }
       return result.address;
     } catch (err: any) {
-      throw new Error(err.message || 'Failed to retrieve account from Freighter.');
+      throw new Error(err.message || 'Failed to authorize account access from Freighter.');
     }
   }
 
@@ -53,7 +53,7 @@ class StellarService {
    */
   async checkNetwork(): Promise<string> {
     try {
-      const result = await freighterApi.getNetwork();
+      const result = await getNetwork();
       if (result && result.network) {
         return result.network;
       }
@@ -144,7 +144,7 @@ class StellarService {
       
       if (statusCallback) statusCallback('Waiting for Signature');
       
-      const result = await freighterApi.signTransaction(txXdr, {
+      const result = await signTransaction(txXdr, {
         networkPassphrase: NETWORK_PASSPHRASE
       });
 
@@ -245,7 +245,7 @@ class StellarService {
       
       if (statusCallback) statusCallback('Waiting for Signature');
       
-      const result = await freighterApi.signTransaction(txXdr, {
+      const result = await signTransaction(txXdr, {
         networkPassphrase: NETWORK_PASSPHRASE
       });
 

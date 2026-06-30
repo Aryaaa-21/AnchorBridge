@@ -10,9 +10,9 @@ Clients lock funds into on-chain escrow. Freelancers complete milestones. Paymen
 
 ## Live Demo
 
-🌐 https://anchorbridge-taupe.vercel.app
+ [Hosted Link](https://anchorbridge-taupe.vercel.app)
 
-🎥 Demo Video: ADD_YOUR_VIDEO_LINK_HERE
+ [Demo Video](https://drive.google.com/file/d/1hG7aL7-fVA0JEII6mdCtELtUWKwsujXE/view?usp=drivesdk)
 
 ---
 
